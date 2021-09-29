@@ -1,0 +1,49 @@
+.characters {
+  &__information {
+    width: 100%;
+    margin-left: 30px;
+  }
+
+  &__item {
+    width: 600px;
+    height: 200px;
+    display: flex;
+    flex-direction: row;
+    font-size: 20px;
+    background:rgb(60, 62, 68);
+    border-radius: 0.5rem;
+    }
+
+    &__name {
+      margin: 10px 0;
+      color: rgb(255,255,255);
+      cursor: pointer;
+    }
+
+    &__name:hover {
+        color: rgb(255, 152, 0);
+    }
+
+    &__species {
+      margin: 0;
+      color: rgb(255,255,255);
+      font-size: 15px;
+    }
+
+    &__location {
+      &__info {
+        font-size: 16px;
+        color: rgb(158, 158, 158);
+      }
+
+      &--details {
+        cursor: pointer;
+        color: rgb(255, 255, 255);
+      }
+
+      &--details:hover {
+        color: rgb(255, 152, 0);
+    }
+    }
+
+}
