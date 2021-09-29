@@ -1,6 +1,6 @@
-import Link from 'next/link'
+import React from 'react';
+import Link from 'next/link';
 import styles from '../../../styles/CharactersItem.module.scss';
-
 
 interface CharacterItemProps {
   id: number,
@@ -11,14 +11,16 @@ interface CharacterItemProps {
 }
 
 const CharactersItem: React.FC<CharacterItemProps> = ({
-  species, image, stat, id, name
+  species, image, stat, id, name,
 }) => (
   <>
     <div className={styles.characters__item}>
-      {/* <img src={image} alt="Characters" /> */}
+      <img src={image} alt="Characters" />
       <div className={styles.characters__information}>
-        <Link href="/character[id]" as={`/character/${id}`} passHref>
-          <h3 className={styles.characters__name}>{name}</h3>
+        <Link href={`/character/${id}`}>
+          <a>
+            <h3 className={styles.characters__name}>{name}</h3>
+          </a>
         </Link>
         <p className={styles.characters__species}>
           {stat}
