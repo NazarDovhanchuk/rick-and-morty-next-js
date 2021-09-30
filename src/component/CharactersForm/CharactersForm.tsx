@@ -14,7 +14,12 @@ const CharactersForm = (): JSX.Element => {
   const handlerOnSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
 
-    router.push(`/search/${search}`);
+    console.log(search);
+
+    router.push({
+      pathname: '/search/[name]',
+      query: { name: search },
+    });
 
     setSearch('');
   };

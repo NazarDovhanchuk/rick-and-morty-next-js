@@ -7,6 +7,7 @@ import CharactersItem from '../../../src/component/CharactersItem/CharactersItem
 import Pagination from '../../../src/component/Pagination/Pagination';
 
 import styles from '../../../styles/Home.module.scss';
+import CharactersForm from '../../../src/component/CharactersForm/CharactersForm';
 
 interface CharacterListProps {
   id: number,
@@ -22,7 +23,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { id } = query;
   const charactersPage = await axios.get(`${defaultData}${id}`).then(({ data }) => data.results);
   const totalPage = await axios.get('https://rickandmortyapi.com/api/character/').then(({ data }) => data.info.pages);
-
   return {
     props: {
       charactersPage,
@@ -33,6 +33,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
 const Page = ({ charactersPage, totalPage }: any): JSX.Element => (
   <>
+    <CharactersForm />
     <div className={styles.charachers}>
       {charactersPage.map((person: CharacterListProps) => (
         <CharactersItem
