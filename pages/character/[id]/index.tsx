@@ -1,14 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import axios from 'axios';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
 import Link from 'next/link';
 
-const defaultId = 'https://rickandmortyapi.com/api/character/';
+const charactersID = 'https://rickandmortyapi.com/api/character/';
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { id } = query;
-  const details = await axios.get(`${defaultId}${id}`).then(({ data }) => data);
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const details = await axios.get(`${charactersID}${params?.id}`).then(({ data }) => data);
 
   return {
     props: {
@@ -16,6 +16,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     },
   };
 };
+
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: [],
+  fallback: 'blocking',
+});
 
 export const CharactersDetails = ({ details }: any): JSX.Element => {
   const { image, species, name } = details;

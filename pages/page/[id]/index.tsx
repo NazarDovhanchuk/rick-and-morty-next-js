@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import axios from 'axios';
@@ -6,7 +7,6 @@ import CharactersItem from '../../../src/component/CharactersItem/CharactersItem
 import Pagination from '../../../src/component/Pagination/Pagination';
 
 import styles from '../../../styles/Home.module.scss';
-import CharactersForm from '../../../src/component/CharactersForm/CharactersForm';
 
 interface CharacterListProps {
   id: number,
@@ -33,7 +33,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
 const Page = ({ charactersPage, totalPage }: any): JSX.Element => (
   <>
-    <CharactersForm />
     <div className={styles.charachers}>
       {charactersPage.map((person: CharacterListProps) => (
         <CharactersItem
