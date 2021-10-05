@@ -14,12 +14,7 @@ const CharactersForm = (): JSX.Element => {
   const handlerOnSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
 
-    console.log(search);
-
-    router.push({
-      pathname: '/search/[name]',
-      query: { name: search },
-    });
+    router.push(`/search/${search.replace(/\s/gi, ',')}`);
 
     setSearch('');
   };

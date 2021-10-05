@@ -5,7 +5,6 @@ import React from 'react';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/dist/client/router';
 import CharactersItem from '../src/component/CharactersItem/CharactersItem';
 
 import styles from '../styles/Home.module.scss';
