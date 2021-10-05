@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
@@ -9,7 +7,7 @@ import Pagination from '../../../src/component/Pagination/Pagination';
 import styles from '../../../styles/Home.module.scss';
 import CharactersForm from '../../../src/component/CharactersForm/CharactersForm';
 
-interface CharacterListProps {
+interface CharacterList {
   id: number,
   name: string;
   species: string;
@@ -17,25 +15,16 @@ interface CharacterListProps {
   status: string,
 }
 
-const defaultData = 'https://rickandmortyapi.com/api/character/?page=';
+interface PageProps {
+  totalPage: number,
+  charactersPage: CharacterList[],
+}
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { id } = query;
-  const charactersPage = await axios.get(`${defaultData}${id}`).then(({ data }) => data.results);
-  const totalPage = await axios.get('https://rickandmortyapi.com/api/character/').then(({ data }) => data.info.pages);
-  return {
-    props: {
-      charactersPage,
-      totalPage,
-    },
-  };
-};
-
-const Page = ({ charactersPage, totalPage }: any): JSX.Element => (
+const Page = ({ charactersPage, totalPage }: PageProps): JSX.Element => (
   <>
     <CharactersForm />
     <div className={styles.charachers}>
-      {charactersPage.map((person: CharacterListProps) => (
+      {charactersPage.map((person) => (
         <CharactersItem
           key={person.id}
           name={person.name}
@@ -51,5 +40,20 @@ const Page = ({ charactersPage, totalPage }: any): JSX.Element => (
     </div>
   </>
 );
+
+const defaultData = 'https://rickandmortyapi.com/api/character/?page=';
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const { id } = query;
+  const charactersPage = await axios.get(`${defaultData}${id}`).then(({ data }) => data.results);
+  const totalPage = await axios.get('https://rickandmortyapi.com/api/character/').then(({ data }) => data.info.pages);
+
+  return {
+    props: {
+      charactersPage,
+      totalPage,
+    },
+  };
+};
 
 export default Page;

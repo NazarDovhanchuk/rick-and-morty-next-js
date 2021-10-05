@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
@@ -9,35 +9,60 @@ import CharactersItem from '../../../src/component/CharactersItem/CharactersItem
 
 import styles from '../../../styles/Home.module.scss';
 
-const Search = ({
-  successCharacters, errorsCharacters,
-}: any): JSX.Element => {
+interface PromiseFulfilledResult {
+  status: 'fulfilled' | 'rejected';
+  value?: any;
+  reason?: any;
+}
+
+interface CharacterItem {
+  map: any;
+  id: number,
+  name: string;
+  species: string;
+  image: string;
+  status: string;
+}
+
+interface SearchProps {
+  successList: CharacterItem[]
+  errorsCharacters: string[],
+  successUrl: string[],
+}
+
+const Search = ({ successList, errorsCharacters, successUrl }: SearchProps): JSX.Element => {
   const failedRequest = errorsCharacters.map((el: string) => el.split('=').slice(1, 2));
+  const successRequest = successUrl.map((el: string) => el.split('=').slice(1, 2));
+
+  console.log(successRequest);
 
   return (
     <>
       <CharactersForm />
-      {failedRequest.map((el: string, index: number) => (
+      {failedRequest.map((el, index) => (
         // eslint-disable-next-line react/no-array-index-key
         <p key={index}>{`Hero not found ${el}`}</p>
       ))}
-      <div className={styles.charachers}>
-        {successCharacters.map((el: any) => (
-          el.map((person:any) => (
-            <CharactersItem
-              key={person.id}
-              name={person.name}
-              species={person.species}
-              image={person.image}
-              stat={person.status}
-              id={person.id}
-            />
-          ))
-
+      <div>
+        {successRequest.map((el, index) => (
+          <p key={index}>{`Hero is Found ${el}`}</p>
         ))}
+        <div className={styles.charachers}>
+          {successList.map((el) => (
+            el.map((person: CharacterItem) => (
+              <CharactersItem
+                key={person.id}
+                name={person.name}
+                species={person.species}
+                image={person.image}
+                stat={person.status}
+                id={person.id}
+              />
+            ))
+          ))}
 
+        </div>
       </div>
-
     </>
   );
 };
@@ -50,18 +75,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const charactersResponse = await Promise.allSettled(allRequest).then((response) => response);
 
-  const successCharacters = charactersResponse
-    .filter((person) => person.status === 'fulfilled')
-    .map((hero) => hero.value.data.results);
+  const successCharacters = charactersResponse.filter((person) => person.status === 'fulfilled');
+
+  const successList = successCharacters.map((hero) => (hero as PromiseFulfilledResult).value.data.results);
+
+  const successUrl = successCharacters.map((hero) => (hero as PromiseFulfilledResult).value.config.url);
 
   const errorsCharacters = charactersResponse
     .filter((p) => p.status === 'rejected')
-    .map((e) => e.reason.config.url);
+    .map((e) => (e as PromiseFulfilledResult).reason.config.url);
 
   return ({
     props: {
-      successCharacters,
+      successList,
       errorsCharacters,
+      successUrl,
     },
   });
 };

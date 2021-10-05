@@ -1,14 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
+import { ErrorBoundary } from 'react-error-boundary';
 import CharactersItem from '../src/component/CharactersItem/CharactersItem';
 
 import styles from '../styles/Home.module.scss';
 import Pagination from '../src/component/Pagination/Pagination';
+
+import Custom404 from './404';
 import CharactersForm from '../src/component/CharactersForm/CharactersForm';
 
 interface CharacterListProps {
@@ -19,21 +19,12 @@ interface CharacterListProps {
   status: string,
 }
 
-const defaultData = 'https://rickandmortyapi.com/api/character/';
+interface HomeProps {
+  totalPage: number,
+  charactersList: CharacterListProps[]
+}
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const charactersList = await axios.get(defaultData).then(({ data }) => data.results);
-  const totalPage = await axios.get('https://rickandmortyapi.com/api/character/').then(({ data }) => data.info.pages);
-
-  return {
-    props: {
-      charactersList,
-      totalPage,
-    },
-  };
-};
-
-const Home = ({ charactersList, totalPage }: any): JSX.Element => (
+const Home = ({ charactersList, totalPage }: HomeProps): JSX.Element => (
   <div className={styles.container}>
     <Head>
       <title>Rick And Morty</title>
@@ -56,9 +47,26 @@ const Home = ({ charactersList, totalPage }: any): JSX.Element => (
           />
         ))}
       </div>
-      <Pagination totalPage={totalPage} />
+      <ErrorBoundary FallbackComponent={Custom404}>
+        <Pagination totalPage={totalPage} />
+      </ErrorBoundary>
     </main>
 
   </div>
 );
+
+const defaultData = 'https://rickandmortyapi.com/api/character/';
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const charactersList = await axios.get(defaultData).then(({ data }) => data.results);
+  const totalPage = await axios.get('https://rickandmortyapi.com/api/character/').then(({ data }) => data.info.pages);
+
+  return {
+    props: {
+      charactersList,
+      totalPage,
+    },
+  };
+};
+
 export default Home;

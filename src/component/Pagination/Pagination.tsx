@@ -1,10 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from 'next/link';
 import React from 'react';
 
 import styles from '../../../styles/Pagination.module.scss';
 
-const Pagination = ({ totalPage }: any): JSX.Element => {
+interface PaginationProps {
+  totalPage: number
+}
+
+const Pagination = ({ totalPage }: PaginationProps): JSX.Element => {
   // implement pagination logic
   const pageArray = (num: number): number[] => {
     const arr: number[] = [];
