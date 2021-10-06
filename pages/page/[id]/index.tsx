@@ -72,10 +72,22 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const page = await axios.get(`${defaultData}`).then(({ data }) => data.results);
+  const page = await axios.get(`${defaultData}`).then(({ data }) => data.info.pages);
 
-  const paths = page.map((el: { id: any; }) => ({
-    params: { id: el.id.toString() },
+  const pageArray = (num: number): number[] => {
+    const arr: number[] = [];
+
+    for (let i = 1; i <= num; i++) {
+      arr.push(i);
+    }
+
+    return arr;
+  };
+
+  const result = pageArray(page);
+
+  const paths = result.map((el) => ({
+    params: { id: el.toString() },
   }));
 
   return { paths, fallback: 'blocking' };
