@@ -27,41 +27,48 @@ interface CharacterItem {
 interface SearchProps {
   successList: CharacterItem[]
   errorsCharacters: string[],
-  successUrl: string[],
+  nameArray: string[],
 }
 
-const Search = ({ successList, errorsCharacters, successUrl }: SearchProps): JSX.Element => {
+const Search = ({ successList, errorsCharacters, nameArray }: SearchProps): JSX.Element => {
   const failedRequest = errorsCharacters.map((el: string) => el.split('=').slice(1, 2));
-  const successRequest = successUrl.map((el: string) => el.split('=').slice(1, 2));
-
-  console.log(successRequest);
+  const successRequest = nameArray.filter((item) => !failedRequest.join().includes(item));
 
   return (
     <>
       <CharactersForm />
-      {failedRequest.map((el, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <p key={index}>{`Hero not found ${el}`}</p>
-      ))}
-      <div>
-        {successRequest.map((el, index) => (
-          <p key={index}>{`Hero is Found ${el}`}</p>
+      {failedRequest.length >= 1 && (
+      <p className={styles.notFoundText}>
+        Hero not found:
+        {failedRequest.map((el, index) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <span className={styles.notFound} key={index}>{el}</span>
         ))}
-        <div className={styles.charachers}>
-          {successList.map((el) => (
-            el.map((person: CharacterItem) => (
-              <CharactersItem
-                key={person.id}
-                name={person.name}
-                species={person.species}
-                image={person.image}
-                stat={person.status}
-                id={person.id}
-              />
-            ))
-          ))}
+      </p>
+      )}
+      <div>
+        {successList.map((el, index) => (
+          <>
+            <p className={styles.found}>
+              Hero found:
+              {successRequest[index]}
+            </p>
+            <div className={styles.charachers}>
+              {el.map((person: CharacterItem) => (
+                <CharactersItem
+                  key={person.id}
+                  name={person.name}
+                  species={person.species}
+                  image={person.image}
+                  stat={person.status}
+                  id={person.id}
+                />
+              ))}
+            </div>
+          </>
 
-        </div>
+        ))}
+
       </div>
     </>
   );
@@ -73,23 +80,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const allRequest = nameArray.map((el) => axios.get(`https://rickandmortyapi.com/api/character/?name=${el}`));
 
-  const charactersResponse = await Promise.allSettled(allRequest).then((response) => response);
+  const charactersResponse:PromiseFulfilledResult[] = await Promise.allSettled(allRequest).then((response) => response);
 
-  const successCharacters = charactersResponse.filter((person) => person.status === 'fulfilled');
-
-  const successList = successCharacters.map((hero) => (hero as PromiseFulfilledResult).value.data.results);
-
-  const successUrl = successCharacters.map((hero) => (hero as PromiseFulfilledResult).value.config.url);
+  const successList = charactersResponse.filter((person) => person.status === 'fulfilled')
+    .map((hero) => hero.value.data.results);
 
   const errorsCharacters = charactersResponse
     .filter((p) => p.status === 'rejected')
-    .map((e) => (e as PromiseFulfilledResult).reason.config.url);
+    .map((e) => e.reason.config.url);
 
   return ({
     props: {
       successList,
       errorsCharacters,
-      successUrl,
+      nameArray,
     },
   });
 };

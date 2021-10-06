@@ -1,0 +1,25 @@
+.input {
+  width: 100%;
+  border:2px solid #aaa;
+  border-radius:4px;
+  outline:none;
+  padding:8px;
+  box-sizing:border-box;
+  box-shadow: 0 0 8px 0 grey;
+  font-size: 20px;
+}
+
+.form {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.button {
+  display: block;
+  margin: 0 auto;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid grey;
+}

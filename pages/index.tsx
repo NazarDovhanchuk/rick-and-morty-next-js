@@ -2,13 +2,11 @@ import React from 'react';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { ErrorBoundary } from 'react-error-boundary';
 import CharactersItem from '../src/component/CharactersItem/CharactersItem';
 
 import styles from '../styles/Home.module.scss';
 import Pagination from '../src/component/Pagination/Pagination';
 
-import Custom404 from './404';
 import CharactersForm from '../src/component/CharactersForm/CharactersForm';
 
 interface CharacterListProps {
@@ -47,9 +45,7 @@ const Home = ({ charactersList, totalPage }: HomeProps): JSX.Element => (
           />
         ))}
       </div>
-      <ErrorBoundary FallbackComponent={Custom404}>
-        <Pagination totalPage={totalPage} />
-      </ErrorBoundary>
+      <Pagination totalPage={totalPage} />
     </main>
 
   </div>

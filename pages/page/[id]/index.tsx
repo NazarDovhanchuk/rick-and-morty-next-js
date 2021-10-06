@@ -45,15 +45,27 @@ const defaultData = 'https://rickandmortyapi.com/api/character/?page=';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { id } = query;
-  const charactersPage = await axios.get(`${defaultData}${id}`).then(({ data }) => data.results);
-  const totalPage = await axios.get('https://rickandmortyapi.com/api/character/').then(({ data }) => data.info.pages);
+  try {
+    const charactersPage = await axios.get(`${defaultData}${id}`).then(({ data }) => data.results);
+    const totalPage = await axios.get('https://rickandmortyapi.com/api/character/').then(({ data }) => data.info.pages);
 
-  return {
-    props: {
-      charactersPage,
-      totalPage,
-    },
-  };
+    if (id && +id > totalPage) {
+      return {
+        notFound: true,
+      };
+    }
+
+    return {
+      props: {
+        charactersPage,
+        totalPage,
+      },
+    };
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 export default Page;
