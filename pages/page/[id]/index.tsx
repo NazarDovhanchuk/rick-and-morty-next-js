@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import axios from 'axios';
-import { GetServerSideProps } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import CharactersItem from '../../../src/component/CharactersItem/CharactersItem';
 import Pagination from '../../../src/component/Pagination/Pagination';
 
@@ -18,11 +19,15 @@ interface CharacterList {
 interface PageProps {
   totalPage: number,
   charactersPage: CharacterList[],
+  id: number;
 }
 
-const Page = ({ charactersPage, totalPage }: PageProps): JSX.Element => (
+const Page = ({ charactersPage, totalPage, id }: PageProps): JSX.Element => (
   <>
     <CharactersForm />
+    <div className={styles.pagination}>
+      <Pagination totalPage={totalPage} id={id} />
+    </div>
     <div className={styles.charachers}>
       {charactersPage.map((person) => (
         <CharactersItem
@@ -35,16 +40,13 @@ const Page = ({ charactersPage, totalPage }: PageProps): JSX.Element => (
         />
       ))}
     </div>
-    <div className={styles.pagination}>
-      <Pagination totalPage={totalPage} />
-    </div>
   </>
 );
 
 const defaultData = 'https://rickandmortyapi.com/api/character/?page=';
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { id } = query;
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { id }: any = context.params;
   try {
     const charactersPage = await axios.get(`${defaultData}${id}`).then(({ data }) => data.results);
     const totalPage = await axios.get('https://rickandmortyapi.com/api/character/').then(({ data }) => data.info.pages);
@@ -57,6 +59,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
     return {
       props: {
+        id,
         charactersPage,
         totalPage,
       },
@@ -67,5 +70,10 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     };
   }
 };
+
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: [],
+  fallback: 'blocking',
+});
 
 export default Page;

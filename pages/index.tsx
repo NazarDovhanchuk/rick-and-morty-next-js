@@ -1,28 +1,10 @@
 import React from 'react';
-import axios from 'axios';
-import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import CharactersItem from '../src/component/CharactersItem/CharactersItem';
+import Link from 'next/link';
 
 import styles from '../styles/Home.module.scss';
-import Pagination from '../src/component/Pagination/Pagination';
 
-import CharactersForm from '../src/component/CharactersForm/CharactersForm';
-
-interface CharacterListProps {
-  id: number,
-  name: string;
-  species: string;
-  image: string;
-  status: string,
-}
-
-interface HomeProps {
-  totalPage: number,
-  charactersList: CharacterListProps[]
-}
-
-const Home = ({ charactersList, totalPage }: HomeProps): JSX.Element => (
+const Home = (): JSX.Element => (
   <div className={styles.container}>
     <Head>
       <title>Rick And Morty</title>
@@ -31,38 +13,15 @@ const Home = ({ charactersList, totalPage }: HomeProps): JSX.Element => (
     </Head>
 
     <main className={styles.main}>
-      <CharactersForm />
-
-      <div className={styles.charachers}>
-        {charactersList.map((person: CharacterListProps) => (
-          <CharactersItem
-            key={person.id}
-            name={person.name}
-            species={person.species}
-            image={person.image}
-            stat={person.status}
-            id={person.id}
-          />
-        ))}
+      <div>
+        <h1>Rick And Morty Api</h1>
+        <Link href="/page/1">
+          <h4 className={styles.button}>Find your Characters</h4>
+        </Link>
       </div>
-      <Pagination totalPage={totalPage} />
     </main>
 
   </div>
 );
-
-const defaultData = 'https://rickandmortyapi.com/api/character/';
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const charactersList = await axios.get(defaultData).then(({ data }) => data.results);
-  const totalPage = await axios.get('https://rickandmortyapi.com/api/character/').then(({ data }) => data.info.pages);
-
-  return {
-    props: {
-      charactersList,
-      totalPage,
-    },
-  };
-};
 
 export default Home;
