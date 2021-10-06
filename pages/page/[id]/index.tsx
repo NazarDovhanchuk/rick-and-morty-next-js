@@ -71,9 +71,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
   }
 };
 
-export const getStaticPaths: GetStaticPaths = async () => ({
-  paths: [],
-  fallback: 'blocking',
-});
+export const getStaticPaths: GetStaticPaths = async () => {
+  const page = await axios.get(`${defaultData}`).then(({ data }) => data.results);
+
+  const paths = page.map((el: { id: any; }) => ({
+    params: { id: el.id.toString() },
+  }));
+
+  return { paths, fallback: 'blocking' };
+};
 
 export default Page;

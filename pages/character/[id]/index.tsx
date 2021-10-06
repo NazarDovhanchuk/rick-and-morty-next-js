@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import axios from 'axios';
 import { GetStaticPaths, GetStaticProps } from 'next';
@@ -45,9 +46,15 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   };
 };
 
-export const getStaticPaths: GetStaticPaths = async () => ({
-  paths: [],
-  fallback: 'blocking',
-});
+export const getStaticPaths: GetStaticPaths = async () => {
+  const details = await axios.get(`${charactersID}`).then(({ data }) => data.results);
+
+  // Get the paths we want to pre-render based on posts
+  const paths = details.map((hero: { id: any; }) => ({
+    params: { id: hero.id.toString() },
+  }));
+
+  return { paths, fallback: 'blocking' };
+};
 
 export default CharactersDetails;
