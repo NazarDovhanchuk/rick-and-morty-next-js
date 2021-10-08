@@ -1,6 +1,5 @@
 import React from "react";
-import rendered from "react-test-renderer";
-import { render, cleanup, screen } from "@testing-library/react";
+import { render, cleanup } from "@testing-library/react";
 
 import CharactersItem from "../CharactersItem";
 
@@ -33,5 +32,12 @@ describe("CharactersItem", () => {
     const image = container.querySelector("img");
 
     expect(image).toHaveAttribute("src");
+  });
+
+  it("it should render id props", () => {
+    const { container } = render(<CharactersItem id="2" />);
+    const aLink = container.querySelector("a");
+
+    expect(aLink).toHaveAttribute("href");
   });
 });

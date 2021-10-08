@@ -26,6 +26,8 @@ const CharactersForm = (): JSX.Element => {
       <input
         className={styles.input}
         type="search"
+        placeholder="Search your hero"
+        aria-label="search-input"
         value={search}
         onChange={handlerOnChange}
       />

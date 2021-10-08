@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Error Components it Error Components render 1`] = `
+<div
+  role="alert"
+>
+  <p>
+    Something went wrong:
+  </p>
+  <pre
+    style={
+      Object {
+        "color": "red",
+      }
+    }
+  />
+</div>
+`;
