@@ -14,6 +14,10 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/character/[id]/index.tsx", "pages/search/[name]"],
+  "include": ["next-env.d.ts", "src/util", "**/*.ts", "**/*.tsx", 
+    "pages/character/[id]/index.tsx", "pages/search/[name]", 
+    "src/component/Pagination/pagination.test.js", "__mocks__/", 
+    "jest.config.js", "jest.setup.js", "setupTests.js", "src/component/Testing/button.test.js",
+    "__tests__/Form.test.js", "src/component/CharactersForm/__tests__/Form.test.js"],
   "exclude": ["node_modules"]
 }

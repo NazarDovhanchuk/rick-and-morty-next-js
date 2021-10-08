@@ -47,6 +47,7 @@ const Pagination = ({ totalPage, id }: PaginationProps): JSX.Element => {
 
   return (
     <div className={styles.pagination}>
+      <h1>'Hello, world!'</h1>
       <Link href={`/page/${Math.max(1, id - 1)}`}>
         <button>Prev Page</button>
       </Link>

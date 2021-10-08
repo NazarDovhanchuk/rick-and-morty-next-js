@@ -10,6 +10,7 @@
   ],
   "parserOptions": {
     "ecmaVersion": 2018,
+    "files": ["*.ts", "*.tsx"],
     "sourceType": "module",
     "project": "tsconfig.json",
     "ecmaFeatures": {

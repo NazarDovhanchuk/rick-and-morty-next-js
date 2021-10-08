@@ -43,6 +43,8 @@ const Page = ({ charactersPage, totalPage, id }: PageProps): JSX.Element => (
   </>
 );
 
+export default Page;
+
 const defaultData = 'https://rickandmortyapi.com/api/character/?page=';
 
 export const getStaticProps: GetStaticProps = async (context) => {
@@ -93,4 +95,3 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: 'blocking' };
 };
 
-export default Page;
